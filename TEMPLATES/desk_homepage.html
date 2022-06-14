@@ -7,7 +7,21 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="post">    
+
+    {% for message in messages%}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong> You should check in on some of those fields below.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div> 
+    {% endfor %}
+    <form method="POST"  >    
+        {% csrf_token %}
+        <label for="desk_number">Desk number:</label><br>
+        <input type="text" id="desk_number" name="desk_number"><br>
+        <label for="desk_password">Desk password:</label><br>
+        <input type="text" id="desk_password" name="desk_password">
         <button type="submit"> Log in </button>
 
     </form>
