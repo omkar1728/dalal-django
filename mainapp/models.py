@@ -11,7 +11,7 @@ class Stock(models.Model):
 
 class Team(models.Model):
     team_number = models.IntegerField()
-    portfolio = {}
+    portfolio = models.JSONField(default = "{}")
 
     def __str__(self):
         return f"Team {self.team_number}"
