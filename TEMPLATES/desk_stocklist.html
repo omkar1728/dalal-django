@@ -7,6 +7,9 @@
     <title>Document</title>
 </head>
 <body>
-    {{}}
+    {% for stock in stocks%}
+    {{ stock.stock_name}}     -----> {{ stock.stock_price }}
+    <br>
+    {% endfor %}
 </body>
 </html>
