@@ -81,8 +81,15 @@ def dashboard(request):
             portfolio_short[stock_name] = str( int(portfolio_short[stock_name]) + quantity)
             team.portfolio_short = portfolio_short
             team.save()
-            
-            
+        
+        elif transaction_type == 'buy_back':
+            if quantity > int(portfolio_short[stock_name]):
+                messages.error(request, 'You short selled only ' + portfolio_short[stock_name] +' shares ' + 'of ' + stock_name)
+            else:
+                team_balance = team_balance - quantity*stock_price
+                team.team_balance = team_balance
+                portfolio_short[stock_name] = str( int(portfolio_short[stock_name]) - quantity)   
+                team.save()  
         else:
             print('seems like non of the transaction type matched.')
 
