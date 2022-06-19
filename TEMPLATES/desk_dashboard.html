@@ -7,7 +7,34 @@
     <title>Document</title>
 </head>
 <body>
-    This is desk dashboard
+    <form method="POST">
+        {% csrf_token %}
+        <label for="team_number">Enter team number</label>
+        <input type="text" name="team_number" id="team_number">
+        <br>
+        <label for="stock_name">Select stock:</label>
+        <select name="stock_name" id="stock_name">
+            {% for stock in stocks%}
+            <option value={{ stock.stock_name }}>{{ stock.stock_name }}</option>
+            {{ stock.stock_name }}
+            {% endfor %}
+        </select>
+        <br>
+        <label for="transaction_type">Select transaction type:</label>
+        <select name = 'transaction_type' id = 'transaction_type'>
+            <option value="buy">BUY</option>
+            <option value="sell">SELL</option>
+            <option value="short_sell">SHORT_SELL</option>
+            <option value="buy_back">BUY_BACK</option>
+        </select>
+        <br>
+
+        <label for="quantity">Enter quantity:</label>
+        <input type="text" name="quantity">
+        <br>
+
+        <button type="submit">Submit</button>
+    </form>
 
 </body>
 </html>

@@ -29,7 +29,22 @@ def home(request):
 
 
 def dashboard(request):
-    return render(request, 'desk_dashboard.html')
+    stock_list = Stock.objects.all()
+    context_list = []
+    for stock in stock_list:
+        context_list.append({'stock_name' : stock.stock_name, 'stock_price' : stock.stock_price})
+    context = {'stocks' : context_list} 
+
+    #handling post request
+    if request.method == 'POST':
+        team_number = request.POST['team_number']
+        stock_name = request.POST['stock_name']
+        transaction_type = request.POST['transaction_type']
+        quantity = request.POST['quantity']
+
+        print(team_number,stock_name,transaction_type,quantity)
+
+    return render(request, 'desk_dashboard.html',context)
 
 
 def desk_stocklist(request):
@@ -37,5 +52,5 @@ def desk_stocklist(request):
     context = []
     for stock in stock_list:
         context.append({'stock_name' : stock.stock_name, 'stock_price' : stock.stock_price})
-        
+
     return render(request, 'desk_stocklist.html', {'stocks' : context})
