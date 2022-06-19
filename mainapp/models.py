@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 
 # Create your models here.
@@ -13,6 +14,6 @@ class Team(models.Model):
     team_number = models.IntegerField()
     team_balance = models.FloatField(default=100000)
     portfolio = models.JSONField(default = "{}")
-
+    portfolio_short = models.JSONField(default = "{}")
     def __str__(self):
         return f"Team {self.team_number}"

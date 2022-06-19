@@ -11,6 +11,6 @@ def create_team(request):
             stock = str(stock.stock_name)
             default_portfolio[stock] = "0"
         for team_number in range(number_of_teams,0,-1):
-            team = Team(team_number = team_number, portfolio = default_portfolio )
+            team = Team(team_number = team_number, portfolio = default_portfolio, portfolio_short = default_portfolio )
             team.save()
     return render(request, "mainapp_create_team.html")

@@ -48,6 +48,7 @@ def dashboard(request):
         team = Team.objects.get(team_number = team_number)
         team_balance = float(team.team_balance)
         portfolio = team.portfolio
+        portfolio_short = team.portfolio_short
 
         print(team_number,stock_name,transaction_type,quantity)
 
@@ -74,7 +75,14 @@ def dashboard(request):
                 team.team_balance = team_balance
                 portfolio[stock_name] = str( int(portfolio[stock_name]) - quantity)   
                 team.save()
-
+        elif transaction_type == 'short_sell':
+            team_balance = team_balance + quantity*stock_price
+            team.team_balance = team_balance
+            portfolio_short[stock_name] = str( int(portfolio_short[stock_name]) + quantity)
+            team.portfolio_short = portfolio_short
+            team.save()
+            
+            
         else:
             print('seems like non of the transaction type matched.')
 
