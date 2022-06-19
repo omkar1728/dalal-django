@@ -11,6 +11,7 @@ class Stock(models.Model):
 
 class Team(models.Model):
     team_number = models.IntegerField()
+    team_balance = models.FloatField(default=100000)
     portfolio = models.JSONField(default = "{}")
 
     def __str__(self):

@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from .models import Desk
 from django.contrib import messages
-from mainapp.models import Stock
+from mainapp.models import Stock, Team
 # Create your views here.
 def home(request):
     if request.method == 'POST':
@@ -20,12 +20,12 @@ def home(request):
                     messages.error(request, "desk number and password does not match")
                     
         except Desk.DoesNotExist:
-            if desk_object == None:
+            if desk_object == None: 
                 messages.error(request, "wrong desk number")
                    
 
         
-    return render(request, 'desk_homepage.html')
+    return render(request, 'desk_homepage.html')        
 
 
 def dashboard(request):
@@ -40,10 +40,30 @@ def dashboard(request):
         team_number = request.POST['team_number']
         stock_name = request.POST['stock_name']
         transaction_type = request.POST['transaction_type']
-        quantity = request.POST['quantity']
+        quantity = int(request.POST['quantity'])
+
+        stock_price = float(Stock.objects.get(stock_name = stock_name).stock_price)
+        team = Team.objects.get(team_number = team_number)
+        team_balance = float(team.team_balance)
+        portfolio = team.portfolio
 
         print(team_number,stock_name,transaction_type,quantity)
 
+
+        print(stock_price,team_balance, quantity)       
+        print(type(stock_price), type(team_balance), type(quantity))
+        if transaction_type == 'buy':
+            if quantity*stock_price > team_balance:
+                messages.error(request, 'You dont have sufficient balance')     
+            else:
+                team_balance = team_balance - quantity*stock_price
+                team.team_balance = team_balance
+                portfolio[stock_name] = str( int(portfolio[stock_name]) + quantity)
+                team.portfolio = portfolio
+
+                team.save()
+
+                
     return render(request, 'desk_dashboard.html',context)
 
 
