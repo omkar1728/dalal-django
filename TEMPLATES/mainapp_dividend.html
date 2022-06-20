@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dividend</title>
+</head>
+<body>
+    this is dividend page
+    <form method="post"> 
+        {% csrf_token%}
+        <label for="stock_name">Select stock:</label>
+        <select name="stock_name" id="stock_name">
+            {% for stock in stocks%}
+            <option value={{ stock.stock_name }}>{{ stock.stock_name }}</option>
+            {{ stock.stock_name }}
+            {% endfor %}
+        </select>
+        <br>
+        <br>
+        <label for="dividend_amount">Enter dividend amount :</label>
+        <input type="text" name = "dividend_amount">
+        <br>
+        <br>
+        <br>
+        <button type="submit">Declare dividend</button>
+    </form>
+</body>
+</html>
