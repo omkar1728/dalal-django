@@ -51,47 +51,59 @@ def dashboard(request):
         portfolio_short = team.portfolio_short
 
         print(team_number,stock_name,transaction_type,quantity)
-
-
         print(stock_price,team_balance, quantity)       
         print(type(stock_price), type(team_balance), type(quantity))
 
         #handling the transactions
         if transaction_type == 'buy':
-            if quantity*stock_price > team_balance:
+            transaction_amount  = quantity*stock_price
+            brokerage = transaction_amount * 0.02
+            if transaction_amount + brokerage> team_balance:
                 messages.error(request, 'Your balance is only ' + str(team_balance))   
             elif 2000 - int(portfolio[stock_name]) < quantity :
                 messages.error(request, 'You can only buy ' + str(2000 - int(portfolio[stock_name])) + ' more shares') 
             else:
-                team_balance = team_balance - quantity*stock_price
+                team_balance = team_balance - quantity*stock_price - brokerage
                 team.team_balance = team_balance
                 portfolio[stock_name] = str( int(portfolio[stock_name]) + quantity)
                 team.portfolio = portfolio
-
                 team.save()
+
+
         elif transaction_type == 'sell':
+            transaction_amount = quantity*stock_price
+            brokerage = transaction_amount *0.02
             if quantity > int(portfolio[stock_name]):
                 messages.error(request, 'You only have ' + portfolio[stock_name] +' shares ' + 'of ' + stock_name)
             else:
-                team_balance = team_balance + quantity*stock_price
+                team_balance = team_balance + transaction_amount - brokerage
                 team.team_balance = team_balance
                 portfolio[stock_name] = str( int(portfolio[stock_name]) - quantity)   
                 team.save()
+
+                
         elif transaction_type == 'short_sell':
+            transaction_amount = quantity*stock_price
+            brokerage = transaction_amount *0.02
             if 2000 - int(portfolio_short[stock_name]) < quantity :
                 messages.error(request, 'You can only short ' + str(2000 - int(portfolio_short[stock_name])) + ' more shares') 
             else:
-                team_balance = team_balance + quantity*stock_price
+                team_balance = team_balance + transaction_amount - brokerage
                 team.team_balance = team_balance
                 portfolio_short[stock_name] = str( int(portfolio_short[stock_name]) + quantity)
                 team.portfolio_short = portfolio_short
                 team.save()
         
+
         elif transaction_type == 'buy_back':
+            transaction_amount = quantity*stock_price
+            brokerage = transaction_amount *0.02
             if quantity > int(portfolio_short[stock_name]):
                 messages.error(request, 'You short selled only ' + portfolio_short[stock_name] +' shares ' + 'of ' + stock_name)
+            elif team_balance - transaction_amount - brokerage <= 100:
+                messages.error(request, "You dont have the requried balance for buy back")
             else:
-                team_balance = team_balance - quantity*stock_price
+                team_balance = team_balance - transaction_amount - brokerage
                 team.team_balance = team_balance
                 portfolio_short[stock_name] = str( int(portfolio_short[stock_name]) - quantity)   
                 team.save()  
